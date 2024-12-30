@@ -1,0 +1,38 @@
+services:
+  django:
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+    image: ledgerko_local_django
+    container_name: ledgerko_local_django
+    depends_on:
+      - postgres
+    volumes:
+      - ../..:/workspaces:cached
+    environment:
+      - POSTGRES_DB=ledgerko
+      - POSTGRES_PASSWORD=ledgerko
+      - POSTGRES_USER=ledgerko
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+    command: /start
+
+  postgres:
+    build:
+      context: ..
+      dockerfile: docker/postgres/Dockerfile
+    image: ledgerko_local_postgres
+    container_name: ledgerko_local_postgres
+    volumes:
+      - ledgerko_local_postgres_data:/var/lib/postgresql/data
+      - ledgerko_local_postgres_data_backups:/backups
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_DB=ledgerko
+      - POSTGRES_PASSWORD=ledgerko
+      - POSTGRES_USER=ledgerko
+
+volumes:
+  ledgerko_local_postgres_data: {}
+  ledgerko_local_postgres_data_backups: {}
