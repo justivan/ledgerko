@@ -5,7 +5,7 @@ set -o errexit
 set -o pipefail
 set -o nounset
 
-WORKDIR="/workspaces/ledger-ko/app"
+WORKDIR="/workspaces/ledgerko/app"
 
 echo "Running Django migrations..."
 python "$WORKDIR/manage.py" migrate
