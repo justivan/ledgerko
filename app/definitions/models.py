@@ -37,9 +37,14 @@ class ExchangeRate(models.Model):
     date = models.DateField()
 
     class Meta:
-        unique_together = ("source_currency", "target_currency", "date")
         db_table = "definitions_exchange_rate"
         verbose_name_plural = "Exchange Rates"
+        constraints = [
+            models.UniqueConstraint(
+                fields=["source_currency", "target_currency", "date"],
+                name="definitions_exchange_rate_source_target_unique",
+            )
+        ]
 
     def __str__(self):
         return f"{self.source_currency.code} to {self.target_currency.code}"

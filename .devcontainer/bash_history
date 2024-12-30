@@ -18,3 +18,7 @@ python manage.py startapp accounts
 python manage.py startapp definitions
 python manage.py makemigrations
 python manage.py migrate
+python manage.py startapp ledgers
+cd app
+python manage.py makemigrations
+python manage.py migrate
