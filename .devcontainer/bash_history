@@ -14,3 +14,7 @@ mkdir formats/__init__.py
 mkdir formats/en_US
 touch formats/en_US/formats.py
 touch formats/en_US/__init__.py
+python manage.py startapp accounts
+python manage.py startapp definitions
+python manage.py makemigrations
+python manage.py migrate

@@ -30,6 +30,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "accounts",
+    "definitions",
     "users",
 ]
 
@@ -105,9 +107,7 @@ USE_I18N = True
 USE_TZ = True
 
 LANGUAGE_CODE = "en-US"
-FORMAT_MODULE_PATH = [
-    "formats",
-]
+FORMAT_MODULE_PATH = ["formats"]
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
