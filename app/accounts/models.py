@@ -17,7 +17,7 @@ class Account(models.Model):
         LOAN = "loan", _("Loan")
         MORTGAGE = "mortgage", _("Mortgage")
 
-    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     type = models.CharField(max_length=120, choices=AccountType)
     name = models.CharField(max_length=120)
     initial_amount = models.DecimalField(
@@ -25,7 +25,7 @@ class Account(models.Model):
         decimal_places=2,
         db_default=0,
     )
-    currency = models.ForeignKey(Currency, on_delete=models.PROTECT)
+    currency = models.ForeignKey(Currency, max_length=3, on_delete=models.PROTECT)
     exclude_from_report = models.BooleanField(db_default=False)
 
     class Meta:
@@ -51,7 +51,20 @@ class TransferRecord(models.Model):
         on_delete=models.CASCADE,
         related_name="transfers_in",
     )
-    amount = models.DecimalField(max_digits=12, decimal_places=4)
+    source_amount = models.DecimalField(max_digits=12, decimal_places=4)
+    source_currency = models.ForeignKey(
+        Currency,
+        max_length=3,
+        on_delete=models.PROTECT,
+        related_name="transfers_out",
+    )
+    target_amount = models.DecimalField(max_digits=12, decimal_places=4)
+    target_currency = models.ForeignKey(
+        Currency,
+        max_length=3,
+        on_delete=models.PROTECT,
+        related_name="transfers_in",
+    )
     date = models.DateField()
 
     class Meta:

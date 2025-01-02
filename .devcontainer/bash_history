@@ -25,3 +25,7 @@ python manage.py migrate
 pwd
 cd app
 python manage.py createsuperuser
+cd app
+python manage.py makemigrations
+clear
+python manage.py makemigrations

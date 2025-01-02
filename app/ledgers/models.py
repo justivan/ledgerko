@@ -1,7 +1,11 @@
 from accounts.models import Account, TransferRecord
 from django.db import models
-
+from django.contrib.auth import get_user_model
+from definitions.models import Currency
 from .enums import PaymentStatus, PaymentType, TransactionType
+from django.utils.text import slugify
+
+User = get_user_model()
 
 
 class Category(models.Model):
@@ -9,6 +13,7 @@ class Category(models.Model):
 
     class Meta:
         ordering = ("name",)
+        verbose_name = "Category"
         verbose_name_plural = "Categories"
 
     def __str__(self) -> str:
@@ -24,8 +29,9 @@ class Subcategory(models.Model):
     )
 
     class Meta:
-        verbose_name_plural = "Subcategories"
         ordering = ("category", "name")
+        verbose_name = "Subcategory"
+        verbose_name_plural = "Subcategories"
         constraints = [
             models.UniqueConstraint(
                 fields=["category", "name"],
@@ -39,12 +45,17 @@ class Subcategory(models.Model):
 
 class Label(models.Model):
     name = models.CharField(max_length=255, unique=True)
+    slug = models.SlugField(max_length=120, editable=False)
 
     class Meta:
         ordering = ("name",)
 
     def __str__(self) -> str:
-        return self.name
+        return self.slug
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
 
 
 class Transaction(models.Model):
@@ -55,16 +66,17 @@ class Transaction(models.Model):
         null=True,
     )
     account = models.ForeignKey(Account, on_delete=models.PROTECT)
-    amount = models.DecimalField(
-        max_digits=15,
-        decimal_places=2,
-        db_default=0,
-    )
-    currency_code = models.CharField(max_length=10)
-    subcategory = models.ForeignKey(
-        Subcategory,
+    amount = models.DecimalField(max_digits=15, decimal_places=2, db_default=0)
+    currency_code = models.ForeignKey(
+        Currency,
+        max_length=3,
         on_delete=models.PROTECT,
-        null=True,
+    )
+    subcategory = models.ForeignKey(Subcategory, on_delete=models.PROTECT)
+    tags = models.ManyToManyField(
+        Label,
+        db_table="ledgers_transaction_label",
+        blank=True,
     )
     date = models.DateTimeField()
     payment_type = models.CharField(
@@ -92,3 +104,48 @@ class Transaction(models.Model):
 
     def __str__(self) -> str:
         return self.transaction_type
+
+
+class TransactionTemplate(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=255)
+    transaction_type = models.CharField(
+        max_length=10,
+        choices=TransactionType.choices,
+        default=TransactionType.EXPENSE,
+    )
+    account = models.ForeignKey(Account, on_delete=models.PROTECT)
+    amount = models.DecimalField(
+        max_digits=15,
+        decimal_places=2,
+        db_default=0,
+    )
+    currency_code = models.ForeignKey(
+        Currency,
+        max_length=3,
+        on_delete=models.PROTECT,
+    )
+    subcategory = models.ForeignKey(Subcategory, on_delete=models.PROTECT)
+    tags = models.ManyToManyField(
+        Label,
+        db_table="ledgers_transaction_label",
+        blank=True,
+    )
+    payment_type = models.CharField(
+        max_length=20,
+        choices=PaymentType.choices,
+        default=PaymentType.CASH,
+    )
+    payment_status = models.CharField(
+        max_length=20,
+        choices=PaymentStatus.choices,
+        default=PaymentStatus.CLEARED,
+    )
+
+    class Meta:
+        db_table = "ledgers_transaction_template"
+        verbose_name = "Transaction Template"
+        verbose_name_plural = "Transaction Templates"
+
+    def __str__(self) -> str:
+        return self.name

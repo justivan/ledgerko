@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "accounts",
     "definitions",
+    "ledgers",
     "users",
 ]
 

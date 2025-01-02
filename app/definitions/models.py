@@ -1,15 +1,15 @@
 from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
 from django.db import models
 
 
 class Currency(models.Model):
-    code = models.CharField(
-        max_length=3, primary_key=True, verbose_name="Currency Code"
-    )
-    name = models.CharField(max_length=120, unique=True, verbose_name="Currency Name")
+    code = models.CharField(_("Currency Code"), max_length=3, primary_key=True)
+    name = models.CharField(_("Currency Name"), max_length=120, unique=True)
 
     class Meta:
         ordering = ("code",)
+        verbose_name = "Currency"
         verbose_name_plural = "Currencies"
 
     def __str__(self) -> str:
@@ -19,20 +19,22 @@ class Currency(models.Model):
 class ExchangeRate(models.Model):
     source_currency = models.ForeignKey(
         Currency,
+        max_length=3,
         on_delete=models.CASCADE,
         related_name="source_rates",
-        verbose_name="Source Currency",
+        verbose_name=_("Source Currency"),
     )
     target_currency = models.ForeignKey(
         Currency,
+        max_length=3,
         on_delete=models.CASCADE,
         related_name="target_rates",
-        verbose_name="Target Currency",
+        verbose_name=_("Target Currency"),
     )
     rate = models.DecimalField(
         max_digits=12,
         decimal_places=4,
-        verbose_name="Exchange Rate",
+        verbose_name=_("Exchange Rate"),
     )
     date = models.DateField()
 
