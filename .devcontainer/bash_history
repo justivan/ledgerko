@@ -22,3 +22,6 @@ python manage.py startapp ledgers
 cd app
 python manage.py makemigrations
 python manage.py migrate
+pwd
+cd app
+python manage.py createsuperuser

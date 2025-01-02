@@ -1,5 +1,7 @@
+from accounts.models import Account, TransferRecord
 from django.db import models
-from django.utils.translation import gettext_lazy as _
+
+from .enums import PaymentStatus, PaymentType, TransactionType
 
 
 class Category(models.Model):
@@ -46,4 +48,47 @@ class Label(models.Model):
 
 
 class Transaction(models.Model):
-    pass
+    transaction_type = models.CharField(
+        max_length=10,
+        choices=TransactionType.choices,
+        default=TransactionType.EXPENSE,
+        null=True,
+    )
+    account = models.ForeignKey(Account, on_delete=models.PROTECT)
+    amount = models.DecimalField(
+        max_digits=15,
+        decimal_places=2,
+        db_default=0,
+    )
+    currency_code = models.CharField(max_length=10)
+    subcategory = models.ForeignKey(
+        Subcategory,
+        on_delete=models.PROTECT,
+        null=True,
+    )
+    date = models.DateTimeField()
+    payment_type = models.CharField(
+        max_length=20,
+        choices=PaymentType.choices,
+        default=PaymentType.CASH,
+    )
+    payment_status = models.CharField(
+        max_length=20,
+        choices=PaymentStatus.choices,
+        default=PaymentStatus.CLEARED,
+    )
+    transfer = models.BooleanField(default=False)
+    transfer_id = models.ForeignKey(
+        TransferRecord,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+    )
+
+    class Meta:
+        db_table = "ledgers_transaction"
+        verbose_name = "Transaction"
+        verbose_name_plural = "Transactions"
+
+    def __str__(self) -> str:
+        return self.transaction_type

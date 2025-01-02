@@ -3,17 +3,19 @@ from django.utils.translation import gettext_lazy as _
 
 
 class TransactionType(models.TextChoices):
-    INCOME = "INCOME", _("Income")
-    EXPENSE = "EXPENSE", _("Expense")
+    INCOME = "income", _("Income")
+    EXPENSE = "expense", _("Expense")
+    TRANSFER = "transfer", _("Transfer")
 
 
 class PaymentType(models.TextChoices):
-    CASH = "CASH", _("Cash")
-    CARD = "CARD", _("Card")
-    BANK_TRANSFER = "BANK_TRANSFER", _("Bank Transfer")
+    CASH = "cash", _("Cash")
+    DEBIT = "debit", _("Debit Card")
+    CREDIT = "credit", _("Credit Card")
+    VOUCHER = "voucher", _("Voucher")
+    BANK_TRANSFER = "bank transfer", _("Bank Transfer")
 
 
 class PaymentStatus(models.TextChoices):
-    PENDING = "PENDING", _("Pending")
-    COMPLETED = "COMPLETED", _("Completed")
-    FAILED = "FAILED", _("Failed")
+    PENDING = "pending", _("Pending")
+    CLEARED = "cleared", _("Cleared")
