@@ -1,0 +1,8 @@
+cd app
+django-admin startproject core .
+mkdir core/settings
+mv core/settings.py core/settings/base.py
+touch core/settings/local.py
+touch core/settings/production.py
+python manage.py startapp users
+python manage.py makemigrations

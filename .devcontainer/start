@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# Exit on error, pipe failure, or unset variables
+set -o errexit
+set -o pipefail
+set -o nounset
+
+WORKDIR="/workspaces/ledgerko/app"
+
+echo "Running Django migrations..."
+python "$WORKDIR/manage.py" migrate
+
+echo "Starting Django development server..."
+exec python "$WORKDIR/manage.py" runserver_plus --reloader-interval 30
