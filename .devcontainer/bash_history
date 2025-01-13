@@ -7,3 +7,11 @@ touch core/settings/production.py
 python manage.py startapp users
 python manage.py makemigrations
 python manage.py createsuperuser
+mkdir formats
+touch formats/en_US/formats.py
+touch formats/en_US/__init__.py
+python manage.py startapp accounts
+python manage.py startapp definitions
+python manage.py makemigrations
+python manage.py startapp ledgers
+python manage.py makemigrations
