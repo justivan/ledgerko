@@ -6,3 +6,4 @@ touch core/settings/local.py
 touch core/settings/production.py
 python manage.py startapp users
 python manage.py makemigrations
+python manage.py createsuperuser
