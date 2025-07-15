@@ -68,9 +68,9 @@ COPY docker/prod/django/entrypoint /entrypoint
 RUN sed -i 's/\r$//g' /entrypoint
 RUN chmod +x /entrypoint
 
-# COPY docker/local/django/start /start
-# RUN sed -i 's/\r$//g' /start
-# RUN chmod +x /start
+COPY docker/local/django/start /start
+RUN sed -i 's/\r$//g' /start
+RUN chmod +x /start
 
 COPY zscaler.crt* /tmp/
 RUN if [ -f /tmp/zscaler.crt ]; then \
