@@ -20,7 +20,6 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 
 env = environ.Env()
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool("DJANGO_DEBUG", False)
 
 # Application definition
@@ -66,7 +65,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "core.wsgi.application"
 
-
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
@@ -76,9 +74,6 @@ DATABASES = {
         "ATOMIC_REQUESTS": True,
     }
 }
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
@@ -114,7 +109,13 @@ FORMAT_MODULE_PATH = ["formats"]
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = "static/"
+STATICFILES_DIRS = [str(BASE_DIR / "static")]
+STATIC_ROOT = str(BASE_DIR.parent / "staticfiles")
+STATIC_URL = "/static/"
+
+# Media
+MEDIA_ROOT = str(BASE_DIR / "media")
+MEDIA_URL = "/media/"
 
 # Authentication
 AUTH_USER_MODEL = "users.User"

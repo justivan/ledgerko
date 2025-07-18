@@ -1,0 +1,25 @@
+{% load static i18n %}
+<!DOCTYPE html>
+{% get_current_language as LANGUAGE_CODE %}
+<html lang="{{ LANGUAGE_CODE }}"  class="h-full bg-gray-900">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>{% block title %}My Project{% endblock %}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="{% block meta_description %}Default description{% endblock %}" />
+  <meta name="author" content="{% block meta_author %}Your Name{% endblock %}" />
+  <link rel="icon" href="{% static 'images/favicon.ico' %}" />
+  
+  {% block css %}
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
+    <link rel="stylesheet" href="{%static 'css/ledgerko-ui.css' %}" />
+  {% endblock css %}
+
+  {% block head_extra %}{% endblock head_extra %}
+</head>
+
+<body class="{% block body_class %}{% endblock %}">
+  {% block content %}{% endblock content %}
+</body>
+</html>                          

@@ -48,3 +48,6 @@ INTERNAL_IPS = ["127.0.0.1"] + [".".join([*ip.split(".")[:-1], "1"]) for ip in i
 
 # django-extensions
 INSTALLED_APPS += ["django_extensions"]
+
+# admin
+ADMIN_URL = "admin/"
