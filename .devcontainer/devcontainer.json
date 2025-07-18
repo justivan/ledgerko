@@ -3,6 +3,9 @@
 {
     "name": "ledgerko-dev",
     "dockerComposeFile": "docker-compose.yml",
+    "features": {
+        "ghcr.io/r3dpoint/devcontainer-features/tailwindcss-standalone-cli:1": {}
+    },
     "init": true,
     "mounts": [
         {
