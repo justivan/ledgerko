@@ -1,0 +1,59 @@
+volumes:
+  production-postgres-data: {}
+  production-postgres-data-backups: {}
+  production-traefik: {}
+  production-django-media: {}
+  
+
+services:
+  django:
+    build:
+      context: .
+      dockerfile: docker/prod/django/Dockerfile
+    image: ledgerko-production-django
+    container_name: ledgerko-production-django
+    depends_on:
+      - postgres
+    volumes:
+      - production-django-media:/app/media
+    env_file:
+      - .env
+    command: /start
+
+  postgres:
+    build:
+      context: .
+      dockerfile: docker/prod/postgres/Dockerfile
+    image: ledgerko-production-postgres
+    container_name: ledgerko-production-postgres
+    volumes:
+      - production-postgres-data:/var/lib/postgresql/data
+      - production-postgres-data-backups:/backups
+    env_file:
+      - .env
+
+  traefik:
+    build:
+      context: .
+      dockerfile: ./docker/prod/traefik/Dockerfile
+    image: ledgerko-production-traefik
+    depends_on:
+      - django
+    volumes:
+      - production-traefik:/etc/traefik/acme
+    ports:
+      - "0.0.0.0:80:80"
+      - "0.0.0.0:443:443"
+
+  redis:
+    image: docker.io/redis:6
+    
+  nginx:
+    build:
+      context: .
+      dockerfile: ./docker/prod/nginx/Dockerfile
+    image: ledgerko-production-nginx
+    depends_on:
+      - django
+    volumes:
+      - production-django-media:/usr/share/nginx/media:ro

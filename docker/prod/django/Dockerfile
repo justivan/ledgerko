@@ -5,7 +5,7 @@ FROM docker.io/python:3.12.11-slim-bookworm AS python
 # Python build stage
 FROM python AS python-build-stage
 
-ARG BUILD_ENVIRONMENT=production
+ARG BUILD_ENVIRONMENT=prod
 
 # Install apt packages
 RUN apt-get update && apt-get install --no-install-recommends -y \
@@ -60,28 +60,28 @@ RUN pip install --no-cache-dir --no-index --find-links=/wheels/ /wheels/* \
   && rm -rf /wheels/
 
 
-COPY --chown=django:django ./compose/production/django/entrypoint /entrypoint
+COPY --chown=django:django ./docker/prod/django/entrypoint /entrypoint
 RUN sed -i 's/\r$//g' /entrypoint
 RUN chmod +x /entrypoint
 
 
-COPY --chown=django:django ./compose/production/django/start /start
+COPY --chown=django:django ./docker/prod/django/start /start
 RUN sed -i 's/\r$//g' /start
 RUN chmod +x /start
 
 
 # copy application code to WORKDIR
-COPY --chown=django:django . ${APP_HOME} 
+COPY --chown=django:django ./app ${APP_HOME} 
 # explicitly create the media folder before changing ownership below
-RUN mkdir -p ${APP_HOME}/cookiecutter/media
+RUN mkdir -p ${APP_HOME}/media
 
 # make django owner of the WORKDIR directory as well.
 RUN chown -R django:django ${APP_HOME}
 
 USER django
 
-RUN DATABASE_URL="" \
-  DJANGO_SETTINGS_MODULE="config.settings.test" \
-  python manage.py compilemessages
+# RUN DATABASE_URL="" \
+#   DJANGO_SETTINGS_MODULE="config.settings.test" \
+#   python manage.py compilemessages
 
 ENTRYPOINT ["/entrypoint"]

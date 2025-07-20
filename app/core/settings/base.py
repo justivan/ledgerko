@@ -109,8 +109,8 @@ FORMAT_MODULE_PATH = ["formats"]
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATICFILES_DIRS = [str(BASE_DIR / "static")]
-STATIC_ROOT = str(BASE_DIR.parent / "staticfiles")
+STATICFILES_DIRS = BASE_DIR / "static"
+STATIC_ROOT = BASE_DIR / "staticfiles"
 STATIC_URL = "/static/"
 
 # Media

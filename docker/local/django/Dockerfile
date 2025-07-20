@@ -64,15 +64,15 @@ COPY --from=python-build-stage /usr/src/wheels /wheels/
 RUN pip install --no-cache-dir --no-index --find-links=/wheels/ /wheels/* \
   && rm -rf /wheels/
 
-COPY docker/prod/django/entrypoint /entrypoint
+COPY ./docker/prod/django/entrypoint /entrypoint
 RUN sed -i 's/\r$//g' /entrypoint
 RUN chmod +x /entrypoint
 
-COPY docker/local/django/start /start
+COPY ./docker/local/django/start /start
 RUN sed -i 's/\r$//g' /start
 RUN chmod +x /start
 
-COPY zscaler.crt* /tmp/
+COPY ./zscaler.crt* /tmp/
 RUN if [ -f /tmp/zscaler.crt ]; then \
       mkdir -p /usr/local/share/ca-certificates && \
       cp /tmp/zscaler.crt /usr/local/share/ca-certificates/ && \
