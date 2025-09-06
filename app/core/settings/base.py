@@ -125,3 +125,39 @@ MEDIA_URL = "/media/"
 
 # Authentication
 AUTH_USER_MODEL = "users.User"
+
+# Broker configuration
+BROKER_CONFIG = {
+    "fee_rules": {
+        "pse": [
+            {"rate": 0.00005, "effective_from": "1900-01-01"},
+            {"rate": 0.000056, "effective_from": "2025-09-04"},
+        ],
+        "sccp": [{"rate": 0.0001, "effective_from": "1900-01-01"}],
+        "sales_tax": [
+            {"rate": 0.006, "effective_from": "1900-01-01"},
+            {"rate": 0.001, "effective_from": "2025-07-01"},
+        ],
+    },
+    "brokers": {
+        "firstmetrosec": {
+            "calculation_method": "WAC",
+            "commission": [{"rate": 0.0028, "effective_from": "1900-01-01"}],
+        },
+        "bpitrade": {
+            "calculation_method": "FIFO",
+            "commission": [
+                {"rate": 0.0028, "effective_from": "1900-01-01", "min_fee": 20.0}
+            ],
+        },
+        "dragonfi": {
+            "calculation_method": "FIFO",
+            "commission": [{"rate": 0.0028, "effective_from": "1900-01-01"}],
+        },
+    },
+    "validation": {
+        "allow_negative_positions": False,
+        "strict_date_validation": True,
+        "minimum_share_price": 0.0001,
+    },
+}
