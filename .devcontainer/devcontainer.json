@@ -1,0 +1,50 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/postgres
+{
+	"name": "ledgerko-dev",
+	"dockerComposeFile": "docker-compose.yml",
+	"init": true,
+	"overrideCommand": false,
+	"service": "django",
+	"workspaceFolder": "/workspaces",
+	"remoteUser": "dev-user",
+	"customizations": {
+		"vscode": {
+			"settings": {
+				"editor.formatOnSave": true,
+				"[python]": {
+					"analysis.autoImportCompletions": true,
+					"analysis.typeCheckingMode": "basic",
+					"defaultInterpreterPath": "/usr/local/bin/python",
+					"editor.codeActionsOnSave": {
+						"source.organizeImports": "always"
+					},
+					"editor.defaultFormatter": "charliermarsh.ruff",
+					"languageServer": "Pylance",
+					"linting.enabled": true,
+					"linting.mypyEnabled": true,
+					"linting.mypyPath": "/usr/local/bin/mypy"
+				}
+			},
+			"extensions": [
+				"davidanson.vscode-markdownlint",
+				"mrmlnc.vscode-duplicate",
+				"visualstudioexptteam.vscodeintellicode",
+				"visualstudioexptteam.intellicode-api-usage-examples",
+				// python
+				"ms-python.python",
+				"ms-python.vscode-pylance",
+				"charliermarsh.ruff",
+				// jupyter
+				"ms-toolsai.jupyter",
+				// django
+				"batisteo.vscode-django"
+			]
+		}
+	}
+	// Uncomment the next line if you want start specific services in your Docker Compose config.
+	// "runServices": [],
+	// Uncomment the next line if you want to keep your containers running after VS Code shuts down.
+	// "shutdownAction": "none",
+	// Uncomment the next line to run commands after the container is created.
+}

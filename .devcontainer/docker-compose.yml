@@ -1,0 +1,37 @@
+volumes:
+  ledger-local-postgres-data: {}
+  ledger-local-postgres-data-backups: {}
+  
+
+services:
+  django:
+    build:
+      context: ..
+      dockerfile: docker/local/django/Dockerfile
+    image: ledger-local-django
+    container_name: ledger-local-django
+    depends_on:
+      - postgres
+    volumes:
+      - /workspaces/.venv
+      - ../:/workspaces:z
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    # command: /start
+    command: sleep infinity
+
+  postgres:
+    build:
+      context: ..
+      dockerfile: docker/prod/postgres/Dockerfile
+    image: ledger-local-postgres
+    container_name: ledger-local-postgres
+    volumes:
+      - ledger-local-postgres-data:/var/lib/postgresql/data
+      - ledger-local-postgres-data-backups:/backups
+    env_file:
+      - .env
+    ports:
+      - "5432:5432"
